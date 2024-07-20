@@ -57,14 +57,14 @@ $config = [
             'name' => 'PHPSESSID', // Thay thế bằng tên session bạn muốn
     ],
         
-        /*
+        
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
             ],
         ],
-        */
+        
     ],
     'params' => $params,
 ];

@@ -27,6 +27,8 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
     <?php $this->head() ?>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
+
 </head>
 <body class="d-flex flex-column h-100">
 <?php $this->beginBody() ?>
@@ -45,9 +47,15 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
             ['label' => 'Home', 'url' => ['/site/index']],
             Yii::$app->user->isGuest && !$isProfilePage ? ['label' => 'Signup', 'url' => ['/site/signup']] : null, // Ẩn liên kết Signup nếu là trang profile hoặc đã đăng nhập
             Yii::$app->user->isGuest
+                ? null
+                : ['label' => 'Image Upload', 'url' => ['/image/upload']],
+            Yii::$app->user->isGuest
+                ? null
+                : ['label' => 'Gallery', 'url' => ['/image/gallery']],
+            Yii::$app->user->isGuest
                 ? ['label' => 'Login', 'url' => ['/site/login']]
                 : [
-                    'label' => 'Logout (' . Yii::$app->user->identity->fullname . ')',
+                    'label' => 'Logout (' . Yii::$app->user->identity->email . ')',
                     'url' => ['/site/logout'],
                     'linkOptions' => ['data-method' => 'post'],
                     'options' => ['class' => 'nav-item']
