@@ -1,6 +1,11 @@
 <?php
+require __DIR__ . '/../vendor/autoload.php';
 
-// comment out the following two lines when deployed to production
+use Symfony\Component\Dotenv\Dotenv;
+
+$dotenv = new Dotenv();
+$dotenv->load(__DIR__.'/../.env');
+
 defined('YII_DEBUG') or define('YII_DEBUG', true);
 defined('YII_ENV') or define('YII_ENV', 'dev');
 

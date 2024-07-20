@@ -31,6 +31,40 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
 <body class="d-flex flex-column h-100">
 <?php $this->beginBody() ?>
 
+<header id="header">
+    <?php
+    NavBar::begin([
+        'brandLabel' => Yii::$app->name,
+        'brandUrl' => Yii::$app->homeUrl,
+        'options' => ['class' => 'navbar-expand-md navbar-dark bg-dark fixed-top']
+    ]);
+        // Xác định nếu đây là trang profile
+        $isProfilePage = (Yii::$app->controller->id === 'site' && Yii::$app->controller->action->id === 'profile');
+
+        $navItems = [
+            ['label' => 'Home', 'url' => ['/site/index']],
+            Yii::$app->user->isGuest && !$isProfilePage ? ['label' => 'Signup', 'url' => ['/site/signup']] : null, // Ẩn liên kết Signup nếu là trang profile hoặc đã đăng nhập
+            Yii::$app->user->isGuest
+                ? ['label' => 'Login', 'url' => ['/site/login']]
+                : [
+                    'label' => 'Logout (' . Yii::$app->user->identity->fullname . ')',
+                    'url' => ['/site/logout'],
+                    'linkOptions' => ['data-method' => 'post'],
+                    'options' => ['class' => 'nav-item']
+                ],
+        ];
+    
+        // Loại bỏ các mục null
+        $navItems = array_filter($navItems);
+    
+        echo Nav::widget([
+            'options' => ['class' => 'navbar-nav'],
+            'items' => $navItems,
+        ]);
+    NavBar::end();
+    ?>
+</header>
+
 <main id="main" class="flex-shrink-0" role="main">
     <div class="container">
         <?php if (!empty($this->params['breadcrumbs'])): ?>
@@ -40,7 +74,6 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
         <?= $content ?>
     </div>
 </main>
-
 <?php $this->endBody() ?>
 </body>
 </html>

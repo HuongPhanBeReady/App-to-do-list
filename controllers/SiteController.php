@@ -8,7 +8,9 @@ use yii\web\Controller;
 use yii\web\Response;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
+use app\models\SignupForm;
 use app\models\ContactForm;
+use app\models\User; 
 
 class SiteController extends Controller
 {
@@ -69,34 +71,13 @@ class SiteController extends Controller
      *
      * @return Response|string
      */
-    public function actionLogin()
-    {
-        if (!Yii::$app->user->isGuest) {
-            return $this->goHome();
-        }
 
-        $model = new LoginForm();
-        if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            return $this->goBack();
-        }
-
-        $model->password = '';
-        return $this->render('login', [
-            'model' => $model,
-        ]);
-    }
 
     /**
      * Logout action.
      *
      * @return Response
      */
-    public function actionLogout()
-    {
-        Yii::$app->user->logout();
-
-        return $this->goHome();
-    }
 
     /**
      * Displays contact page.
@@ -124,5 +105,53 @@ class SiteController extends Controller
     public function actionAbout()
     {
         return $this->render('about');
+    }
+
+    public function actionSignup()
+    {
+        $model = new SignupForm();
+        if ($model->load(Yii::$app->request->post()) && $model->signup()) {
+            return $this->redirect(['site/signup-success']);
+        }
+
+        return $this->render('signup', [
+            'model' => $model,
+        ]);
+    }
+
+    public function actionSignupSuccess()
+    {
+        return $this->render('signup-success');
+    }
+
+    public function actionLogin()
+    {
+        $model = new LoginForm();
+    
+        if ($model->load(Yii::$app->request->post()) && $model->login()) {
+            return $this->redirect(['profile']);
+        }
+    
+        return $this->render('login', [
+            'model' => $model,
+        ]);
+    }
+    public function actionProfile()
+    {
+        $user = Yii::$app->user->identity;
+        if ($user === null) {
+            return $this->redirect(['login']);
+        }
+
+        return $this->render('profile', [
+            'user' => $user,
+        ]);
+    }
+
+    public function actionLogout()
+    {
+        Yii::$app->user->logout();
+
+        return $this->goHome();
     }
 }

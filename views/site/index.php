@@ -2,7 +2,7 @@
 
 /** @var yii\web\View $this */
 
-$this->title = 'My To do list App';
+$this->title = 'My To do App';
 ?>
     <div x-data="toDoList()" class="max-w-2xl mx-auto px-12 py-8 rounded-lg shadow-lg bg-gray-300 h-screen flex flex-col">
         <div class="flex justify-between items-center mb-2">

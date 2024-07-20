@@ -16,12 +16,14 @@ $config = [
     'components' => [
         'cache' => [
             'class' => 'yii\caching\FileCache',
-        ],
+            ],
         'log' => [
+            'traceLevel' => YII_DEBUG ? 3 : 0,
             'targets' => [
                 [
                     'class' => 'yii\log\FileTarget',
                     'levels' => ['error', 'warning'],
+                    'logFile' => '@runtime/logs/app.log', // Đảm bảo đường dẫn đến file log chính xác
                 ],
             ],
         ],

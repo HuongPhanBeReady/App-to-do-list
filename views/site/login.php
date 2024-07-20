@@ -2,54 +2,51 @@
 
 /** @var yii\web\View $this */
 /** @var yii\bootstrap5\ActiveForm $form */
-
 /** @var app\models\LoginForm $model */
+use yii\captcha\Captcha;
 
-use yii\bootstrap5\ActiveForm;
+
 use yii\bootstrap5\Html;
+use yii\bootstrap5\ActiveForm;
+use yii\captcha\ReCaptcha3;
+
 
 $this->title = 'Login';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="site-login">
-    <h1><?= Html::encode($this->title) ?></h1>
+<div class="flex items-center justify-center min-h-[80vh] bg-gray-100">
+    <div class="w-full max-w-md bg-white p-8 rounded-lg shadow-lg">
+        <h1 class="text-3xl font-bold mb-6 text-center"><?= Html::encode($this->title) ?></h1>
 
-    <p>Please fill out the following fields to login:</p>
+        <p class="text-center mb-6">Please fill out the following information to login:</p>
 
-    <div class="row">
-        <div class="col-lg-5">
+        <?php $form = ActiveForm::begin(['id' => 'login-form']); ?>
 
-            <?php $form = ActiveForm::begin([
-                'id' => 'login-form',
-                'fieldConfig' => [
-                    'template' => "{label}\n{input}\n{error}",
-                    'labelOptions' => ['class' => 'col-lg-1 col-form-label mr-lg-3'],
-                    'inputOptions' => ['class' => 'col-lg-3 form-control'],
-                    'errorOptions' => ['class' => 'col-lg-7 invalid-feedback'],
-                ],
-            ]); ?>
-
-            <?= $form->field($model, 'username')->textInput(['autofocus' => true]) ?>
-
-            <?= $form->field($model, 'password')->passwordInput() ?>
-
-            <?= $form->field($model, 'rememberMe')->checkbox([
-                'template' => "<div class=\"custom-control custom-checkbox\">{input} {label}</div>\n<div class=\"col-lg-8\">{error}</div>",
-            ]) ?>
-
-            <div class="form-group">
-                <div>
-                    <?= Html::submitButton('Login', ['class' => 'btn btn-primary', 'name' => 'login-button']) ?>
-                </div>
+            <div class="mb-4">
+                <?= $form->field($model, 'email')->textInput([
+                    'autofocus' => true,
+                    'class' => 'form-input mt-1 block w-full border border-gray-300 rounded-md shadow-sm'
+                ]) ?>
             </div>
+
+            <div class="mb-4">
+                <?= $form->field($model, 'password')->passwordInput([
+                    'class' => 'form-input mt-1 block w-full border border-gray-300 rounded-md shadow-sm'
+                ]) ?>
+            </div>
+
+            <div class="mb-4">
+                <?= $form->field($model, 'verifyCode')->widget(Captcha::class, [
+                    'template' => '<div class="row"><div class="col-lg-3">{image}</div><div class="col-lg-6">{input}</div></div>',
+                ]) ?>
+            
+            </div>
+
+                <div class="form-group">
+                    <?= Html::submitButton('Đăng nhập', ['class' => 'btn btn-primary', 'name' => 'login-button']) ?>
+                </div>
 
             <?php ActiveForm::end(); ?>
-
-            <div style="color:#999;">
-                You may login with <strong>admin/admin</strong> or <strong>demo/demo</strong>.<br>
-                To modify the username/password, please check out the code <code>app\models\User::$users</code>.
-            </div>
-
         </div>
     </div>
 </div>
