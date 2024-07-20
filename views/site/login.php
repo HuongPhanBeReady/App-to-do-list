@@ -41,10 +41,9 @@ $this->params['breadcrumbs'][] = $this->title;
                 ]) ?>
             
             </div>
-
-                <div class="form-group">
-                    <?= Html::submitButton('Đăng nhập', ['class' => 'btn btn-primary', 'name' => 'login-button']) ?>
-                </div>
+            <div class="form-group text-center">
+                <?= Html::submitButton('Login', ['class' => 'btn btn-primary', 'name' => 'login-button']) ?>
+            </div>
 
             <?php ActiveForm::end(); ?>
         </div>
