@@ -18,8 +18,6 @@ use yii\base\Security;
  * @property string $verification_token
  * @property string $email
  * @property string $auth_key
- * @property integer $created_at
- * @property integer $updated_at
  * @property string $auth_key
  * @property integer $status
 
@@ -44,9 +42,8 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public function behaviors()
     {
-        return [
-            TimestampBehavior::class,
-        ];
+        return []; 
+
     }
 
     /**
@@ -57,8 +54,6 @@ class User extends ActiveRecord implements IdentityInterface
         return [
             ['status', 'default', 'value' => self::STATUS_INACTIVE],
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_INACTIVE, self::STATUS_DELETED]],
-            [['created_at', 'updated_at'], 'integer'],
-
         ];
     }
 

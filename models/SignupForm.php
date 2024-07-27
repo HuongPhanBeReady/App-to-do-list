@@ -60,8 +60,6 @@ class SignupForm extends Model
         $user->generateAuthKey();
         $user->generateEmailVerificationToken();
         $user->status = User::STATUS_INACTIVE; 
-        $user->created_at = time(); 
-        $user->updated_at = time(); 
         if ($user->save()) {
             return Yii::$app->response->redirect(['site/signup-success']);
         }
