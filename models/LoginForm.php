@@ -33,6 +33,8 @@ class LoginForm extends Model
             ['password', 'match', 'pattern' => '/^[a-zA-Z0-9@%&*]+$/', 'message' => 'Password can only contain a-z, A-Z, 0-9, and @%&*.'],
 
             ['verifyCode', 'captcha'],
+            ['password', 'validatePassword'], // Thêm dòng này
+
         ];
     }
 
@@ -57,15 +59,17 @@ class LoginForm extends Model
     }
     
     public function login()
-    {    
+    {   
         if ($this->validate()) {
-                return Yii::$app->user->login($this->getUser());
+            $user = $this->getUser();
+            if ($user !== null && $user->validatePassword($this->password)) {
+                return Yii::$app->user->login($user);
             } else {
-                return false;
-
+                $this->addError('password', 'Incorrect email or password.');
             }
+        }
+        return false;
     }
-
     protected function getUser()
     {
         if ($this->_user === false) {
