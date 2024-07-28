@@ -6,8 +6,11 @@ use Yii;
 use yii\web\Controller;
 use yii\web\UploadedFile;
 use app\models\ImageUpload;
-use yii\helpers\FileHelper;
 use yii\web\ForbiddenHttpException;
+use app\models\UserImage;
+use app\services\ImageService;
+
+
 class ImageController extends Controller
 {
     public function actionUpload()
@@ -17,7 +20,7 @@ class ImageController extends Controller
 
         $httpReferer = Yii::$app->request->referrer;
         
-        if (!$this->isValidReferer($httpReferer, $expectedDomain)) {
+        if (!ImageService::isValidReferer($httpReferer, $expectedDomain)) {
             throw new ForbiddenHttpException('Invalid domain for file upload.');
         }
         $model = new ImageUpload();
@@ -31,38 +34,27 @@ class ImageController extends Controller
 
         return $this->render('upload', ['model' => $model]);
     }
-    private function isValidReferer($referer, $expectedDomain)
-    {
-            
-        if (!$referer) {
-            return false;
-        }
-    
-        $refererHost = parse_url($referer, PHP_URL_HOST);
-    
-        return $refererHost === $expectedDomain;
-    }
     
     public function actionGallery()
-    {
-        $email = Yii::$app->user->identity->email;
-        $path = Yii::getAlias('@webroot/uploads/' . $email . '/webp');
-        $images = [];
-        if (is_dir($path)) {
-            $images = FileHelper::findFiles($path, ['only' => ['*.webp']]);
+    {   
+        if (Yii::$app->user->isGuest) {
+            throw new ForbiddenHttpException('You need to log in to access this page.');
         }
+        $userId = Yii::$app->user->identity->id;
+
+        $images = UserImage::find()
+            ->where(['user_id' => $userId, 'deleted_at' => null])
+            ->all();
 
         return $this->render('gallery', ['images' => $images]);
     }
 
-    public function actionDelete($filename)
+    public function actionDelete($id)
     {
-        $email = Yii::$app->user->identity->email;
-        $path = Yii::getAlias('@webroot/uploads/' . $email . '/webp/' . $filename);
-        if (file_exists($path)) {
-            unlink($path);
+        $userId = Yii::$app->user->identity->id;
+        if (ImageService::deleteImage($id, $userId)) {
+            return $this->redirect(['gallery']);
         }
-        return $this->redirect(['gallery']);
+        throw new \yii\web\NotFoundHttpException('Image not found.');
     }
-
 }

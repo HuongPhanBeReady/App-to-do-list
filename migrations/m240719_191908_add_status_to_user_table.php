@@ -22,4 +22,4 @@ class m240719_191908_add_status_to_user_table extends Migration
     {
         $this->dropColumn('{{%user}}', 'status');
     }
-}
+}                                                                                                                                                                                                                                                                                                                                        

@@ -10,8 +10,8 @@ $this->title = 'My Gallery';
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 w-full max-w-5xl">
         <?php foreach ($images as $image): ?>
             <div class="relative bg-gray-100 p-2 rounded overflow-hidden">
-                <img src="<?= Yii::getAlias('@web') . '/uploads/' . Yii::$app->user->identity->email . '/webp/' . basename($image) ?>" class="w-full h-auto object-cover rounded">
-                <?= Html::a('Delete', ['delete', 'filename' => basename($image)], [
+            <img src="<?= Yii::getAlias('@web') . '/uploads/' . Yii::$app->user->identity->email . '/webp/' . Html::encode($image->name_file) . '.webp' ?>" class="w-full h-auto object-cover rounded">
+                <?= Html::a('Delete', ['delete', 'id' => $image->id], [
                         'class' => 'bg-gray-200 p-2 rounded-full flex items-center justify-center',
                         'data' => [
                         'confirm' => 'Are you sure you want to delete this item?',

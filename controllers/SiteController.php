@@ -154,4 +154,35 @@ class SiteController extends Controller
 
         return $this->goHome();
     }
+    public function actionError()
+    {
+        $exception = Yii::$app->errorHandler->exception;
+        
+        if ($exception instanceof \yii\web\ForbiddenHttpException) {
+            // If the error is 403, display the custom 403 error page
+            return $this->render('error403', [
+                'name' => 'Error 403',
+                'message' => 'You need to log in to access this page.',
+            ]);
+        }
+        
+        // Handle other errors
+        return $this->render('error', [
+            'name' => $exception instanceof \yii\base\UserException ? $exception->getName() : 'Error',
+            'message' => $exception instanceof \yii\base\UserException ? $exception->getMessage() : 'An error occurred.',
+        ]);
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
